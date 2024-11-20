@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            progressBar1 = new ProgressBar();
+            pbProgress = new ProgressBar();
             btnStart = new Button();
             lblFilesTxt = new Label();
             lblFile = new Label();
@@ -44,15 +44,16 @@
             cbSetOutputFolder = new CheckBox();
             lblOutputFolder = new Label();
             btnSelectOutputFolder = new Button();
+            backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             SuspendLayout();
             // 
-            // progressBar1
+            // pbProgress
             // 
-            progressBar1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            progressBar1.Location = new Point(12, 129);
-            progressBar1.Name = "progressBar1";
-            progressBar1.Size = new Size(440, 14);
-            progressBar1.TabIndex = 0;
+            pbProgress.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            pbProgress.Location = new Point(12, 129);
+            pbProgress.Name = "pbProgress";
+            pbProgress.Size = new Size(440, 14);
+            pbProgress.TabIndex = 0;
             // 
             // btnStart
             // 
@@ -93,6 +94,7 @@
             btnSelectFile.TabIndex = 4;
             btnSelectFile.Text = "...";
             btnSelectFile.UseVisualStyleBackColor = true;
+            btnSelectFile.Click += btnSelectFile_Click;
             // 
             // lblFolderTxt
             // 
@@ -122,6 +124,7 @@
             btnSelectFolder.TabIndex = 7;
             btnSelectFolder.Text = "...";
             btnSelectFolder.UseVisualStyleBackColor = true;
+            btnSelectFolder.Click += btnSelectFolder_Click;
             // 
             // lblFileCountTxt
             // 
@@ -172,6 +175,7 @@
             cbSetFileDate.TabIndex = 12;
             cbSetFileDate.Text = "Set file date";
             cbSetFileDate.UseVisualStyleBackColor = true;
+            cbSetFileDate.CheckedChanged += cbSetFileDate_CheckedChanged;
             // 
             // cbSetOutputFolder
             // 
@@ -183,6 +187,7 @@
             cbSetOutputFolder.TabIndex = 13;
             cbSetOutputFolder.Text = "Output folder";
             cbSetOutputFolder.UseVisualStyleBackColor = true;
+            cbSetOutputFolder.Click += cbSetOutputFolder_Click;
             // 
             // lblOutputFolder
             // 
@@ -204,6 +209,13 @@
             btnSelectOutputFolder.Text = "...";
             btnSelectOutputFolder.UseVisualStyleBackColor = true;
             // 
+            // backgroundWorker1
+            // 
+            backgroundWorker1.WorkerReportsProgress = true;
+            backgroundWorker1.DoWork += backgroundWorker1_DoWork_1;
+            backgroundWorker1.ProgressChanged += backgroundWorker1_ProgressChanged;
+            backgroundWorker1.RunWorkerCompleted += backgroundWorker1_RunWorkerCompleted_1;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -224,11 +236,12 @@
             Controls.Add(lblFile);
             Controls.Add(lblFilesTxt);
             Controls.Add(btnStart);
-            Controls.Add(progressBar1);
+            Controls.Add(pbProgress);
             DoubleBuffered = true;
             MinimumSize = new Size(480, 260);
             Name = "MainForm";
             Text = "MP4 Meta Data Remover";
+            FormClosing += MainForm_FormClosing;
             Shown += MainForm_Shown;
             ResumeLayout(false);
             PerformLayout();
@@ -236,7 +249,7 @@
 
         #endregion
 
-        private ProgressBar progressBar1;
+        private ProgressBar pbProgress;
         private Button btnStart;
         private Label lblFilesTxt;
         private Label lblFile;
@@ -252,5 +265,6 @@
         private CheckBox cbSetOutputFolder;
         private Label lblOutputFolder;
         private Button btnSelectOutputFolder;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
     }
 }
