@@ -212,12 +212,14 @@
             // backgroundWorker1
             // 
             backgroundWorker1.WorkerReportsProgress = true;
+            backgroundWorker1.WorkerSupportsCancellation = true;
             backgroundWorker1.DoWork += backgroundWorker1_DoWork_1;
             backgroundWorker1.ProgressChanged += backgroundWorker1_ProgressChanged;
             backgroundWorker1.RunWorkerCompleted += backgroundWorker1_RunWorkerCompleted_1;
             // 
             // MainForm
             // 
+            AllowDrop = true;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(464, 221);
@@ -243,6 +245,8 @@
             Text = "MP4 Meta Data Remover";
             FormClosing += MainForm_FormClosing;
             Shown += MainForm_Shown;
+            DragDrop += MainForm_DragDrop;
+            DragEnter += MainForm_DragEnter;
             ResumeLayout(false);
             PerformLayout();
         }

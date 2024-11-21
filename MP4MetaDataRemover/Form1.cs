@@ -23,29 +23,38 @@ namespace MP4MetaDataRemover
         private void btnStart_Click(object sender, EventArgs e)
         {
 
-            if (!conversionSettings.useDestinationFolder)
+            if (backgroundWorker1.IsBusy)
             {
-                var filePath = Path.GetDirectoryName(conversionSettings.files[0]);
-                if (filePath != null) 
-                    conversionSettings.destinationPath = Path.Combine(filePath, TMP_FOLDER);
+                btnStart.Text = "Aborting...";
+                btnStart.Enabled = false;
+                backgroundWorker1.CancelAsync();
             }
-
-            if (!FolderCheck())
-            {
-                MessageBox.Show("It''s not allowed to use the same folder as output folder.");
-                return;
-            };
-
-            btnStart.Text = "Stop";
-            btnSelectFolder.Enabled = false;
-            cbSetFileDate.Enabled = false;
-            dtpFileDate.Enabled = false;
-            if (cbSetFileDate.Checked)
-                conversionSettings.fileDate = new DateTime(dtpFileDate.Value.Year, dtpFileDate.Value.Month, dtpFileDate.Value.Day, dtpFileDate.Value.Hour, dtpFileDate.Value.Minute, 0, 0);
             else
-                conversionSettings.fileDate = new DateTime(0);
+            {
+                if (!conversionSettings.useDestinationFolder)
+                {
+                    var filePath = Path.GetDirectoryName(conversionSettings.files[0]);
+                    if (filePath != null)
+                        conversionSettings.destinationPath = Path.Combine(filePath, TMP_FOLDER);
+                }
 
-            backgroundWorker1.RunWorkerAsync();
+                if (!FolderCheck())
+                {
+                    MessageBox.Show("It''s not allowed to use the same folder as output folder.");
+                    return;
+                };
+
+                btnStart.Text = "Stop";
+                btnSelectFolder.Enabled = false;
+                cbSetFileDate.Enabled = false;
+                dtpFileDate.Enabled = false;
+                if (cbSetFileDate.Checked)
+                    conversionSettings.fileDate = new DateTime(dtpFileDate.Value.Year, dtpFileDate.Value.Month, dtpFileDate.Value.Day, dtpFileDate.Value.Hour, dtpFileDate.Value.Minute, 0, 0);
+                else
+                    conversionSettings.fileDate = new DateTime(0);
+
+                backgroundWorker1.RunWorkerAsync();
+            }
         }
 
         private bool FolderCheck()
@@ -66,8 +75,7 @@ namespace MP4MetaDataRemover
 
         string PathAddDirectorySeparator(string path)
         {
-            if (path is null)
-                throw new ArgumentNullException(nameof(path));
+            ArgumentNullException.ThrowIfNull(path);
 
             path = path.TrimEnd();
 
@@ -93,21 +101,13 @@ namespace MP4MetaDataRemover
             public string OutputFolder { get; set; } = string.Empty;
         }
 
-        struct ConversionSettings
+        struct ConversionSettings(DateTime aFileDate, string aSelectedFolderPath, string aDestinationFolder, bool aUseDestinationFolder)
         {
-            public DateTime fileDate;
-            public List<string> files;
-            public string selectedFolderPath;
-            public string destinationPath;
-            public bool useDestinationFolder;
-            public ConversionSettings(DateTime aFileDate, string aSelectedFolderPath, string aDestinationFolder, bool aUseDestinationFolder)
-            {
-                fileDate = aFileDate;
-                selectedFolderPath = aSelectedFolderPath;
-                destinationPath = aDestinationFolder;
-                useDestinationFolder = aUseDestinationFolder;
-                files = new List<string>();
-            }
+            public DateTime fileDate = aFileDate;
+            public List<string> files = [];
+            public string selectedFolderPath = aSelectedFolderPath;
+            public string destinationPath = aDestinationFolder;
+            public bool useDestinationFolder = aUseDestinationFolder;
         }
 
         private ConversionSettings conversionSettings;
@@ -223,12 +223,13 @@ namespace MP4MetaDataRemover
 
         private void SaveSettings()
         {
-            var settings = new SystemSettings();
-
-            settings.SetFileDate = cbSetFileDate.Checked;
-            settings.FileDate = dtpFileDate.Value;
-            settings.SetOutputFolder = cbSetOutputFolder.Checked;
-            settings.OutputFolder = conversionSettings.destinationPath;
+            var settings = new SystemSettings
+            {
+                SetFileDate = cbSetFileDate.Checked,
+                FileDate = dtpFileDate.Value,
+                SetOutputFolder = cbSetOutputFolder.Checked,
+                OutputFolder = conversionSettings.destinationPath
+            };
 
             var jsonString = JsonSerializer.Serialize<SystemSettings>(settings);
 
@@ -267,7 +268,6 @@ namespace MP4MetaDataRemover
             lblCount.Text = "-";
             lblProgress.Text = "";
             LoadSettings();
-            //DragAcceptFiles(Handle, True);
         }
 
         private void cbSetOutputFolder_Click(object sender, EventArgs e)
@@ -319,6 +319,12 @@ namespace MP4MetaDataRemover
         {
             for (int i = 0; i < conversionSettings.files.Count; i++)
             {
+                if (sender is BackgroundWorker worker && worker.CancellationPending)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+
                 Thread.Sleep(1000);
                 backgroundWorker1.ReportProgress(i + 1);
             }
@@ -332,7 +338,10 @@ namespace MP4MetaDataRemover
         private void backgroundWorker1_RunWorkerCompleted_1(object sender, RunWorkerCompletedEventArgs e)
         {
             if (e.Cancelled)
+            {
                 MessageBox.Show("Operation was canceled");
+                ProgressUpdate(0, conversionSettings.files.Count);
+            }                
             else if (e.Error != null)
                 MessageBox.Show(e.Error.Message);
             else if (e.Result != null)
@@ -345,6 +354,45 @@ namespace MP4MetaDataRemover
             btnSelectFolder.Enabled = true;
             cbSetFileDate.Enabled = true;
             dtpFileDate.Enabled = true;
+        }
+
+        private void MainForm_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Copy;
+        }
+
+        private void MainForm_DragDrop(object sender, DragEventArgs e)
+        {
+            if (e == null || e.Data == null)
+                return;
+
+            List<string> files;
+
+            if (e.Data.GetData(DataFormats.FileDrop) is string[] dropped)
+                files = dropped.ToList();
+            else
+                return;
+
+            bool lFolderMode = false;
+
+            foreach (var file in files)
+            {
+                if (Path.GetExtension(file).ToUpper() == ".MP4")
+                    conversionSettings.files.Add(file);
+                else if (files.Count == 1 && Directory.Exists(file))
+                {
+                    conversionSettings.selectedFolderPath = file;
+                    lFolderMode = true;
+                }            
+            }
+
+            if (lFolderMode)
+            {
+                EnableFolder();
+                conversionSettings.files.Clear();
+            }
+            else if (conversionSettings.files.Count > 0)
+                EnableFiles();                
         }
     }
 }
