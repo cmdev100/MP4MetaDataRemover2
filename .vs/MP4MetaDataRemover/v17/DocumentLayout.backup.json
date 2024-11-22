@@ -7,12 +7,12 @@
       "RelativeMoniker": "D:0:0:{02CCF771-8857-48B0-B563-D618C3A5F2F0}|MP4MetaDataRemover\\MP4MetaDataRemover.csproj|solutionrelative:mp4metadataremover\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{02CCF771-8857-48B0-B563-D618C3A5F2F0}|MP4MetaDataRemover\\MP4MetaDataRemover.csproj|D:\\8. Development\\C#\\MP4MetaDataRemover\\MP4MetaDataRemover\\mp4metadataremover\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{02CCF771-8857-48B0-B563-D618C3A5F2F0}|MP4MetaDataRemover\\MP4MetaDataRemover.csproj|solutionrelative:mp4metadataremover\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{02CCF771-8857-48B0-B563-D618C3A5F2F0}|MP4MetaDataRemover\\MP4MetaDataRemover.csproj|d:\\8. development\\c#\\mp4metadataremover\\mp4metadataremover\\mp4metadataremover\\mp4metadataremover.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|",
       "RelativeMoniker": "D:0:0:{02CCF771-8857-48B0-B563-D618C3A5F2F0}|MP4MetaDataRemover\\MP4MetaDataRemover.csproj|solutionrelative:mp4metadataremover\\mp4metadataremover.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{02CCF771-8857-48B0-B563-D618C3A5F2F0}|MP4MetaDataRemover\\MP4MetaDataRemover.csproj|D:\\8. Development\\C#\\MP4MetaDataRemover\\MP4MetaDataRemover\\mp4metadataremover\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{02CCF771-8857-48B0-B563-D618C3A5F2F0}|MP4MetaDataRemover\\MP4MetaDataRemover.csproj|solutionrelative:mp4metadataremover\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,7 +30,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "MP4MetaDataRemover",
               "DocumentMoniker": "D:\\8. Development\\C#\\MP4MetaDataRemover\\MP4MetaDataRemover\\MP4MetaDataRemover\\MP4MetaDataRemover.csproj",
               "RelativeDocumentMoniker": "MP4MetaDataRemover\\MP4MetaDataRemover.csproj",
@@ -47,22 +47,21 @@
               "RelativeDocumentMoniker": "MP4MetaDataRemover\\Form1.cs",
               "ToolTip": "D:\\8. Development\\C#\\MP4MetaDataRemover\\MP4MetaDataRemover\\MP4MetaDataRemover\\Form1.cs",
               "RelativeToolTip": "MP4MetaDataRemover\\Form1.cs",
-              "ViewState": "AgIAADMBAAAAAAAAAAAQwFYBAABCAAAAAAAAAA==",
+              "ViewState": "AgIAANIAAAAAAAAAAAAAAPgAAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-11-18T19:33:32.984Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "Form1.cs [Design]",
               "DocumentMoniker": "D:\\8. Development\\C#\\MP4MetaDataRemover\\MP4MetaDataRemover\\MP4MetaDataRemover\\Form1.cs",
               "RelativeDocumentMoniker": "MP4MetaDataRemover\\Form1.cs",
               "ToolTip": "D:\\8. Development\\C#\\MP4MetaDataRemover\\MP4MetaDataRemover\\MP4MetaDataRemover\\Form1.cs [Design]",
               "RelativeToolTip": "MP4MetaDataRemover\\Form1.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-18T18:33:01.935Z",
-              "EditorCaption": " [Design]"
+              "WhenOpened": "2024-11-18T18:33:01.935Z"
             }
           ]
         }
