@@ -6,6 +6,8 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <StartupObject>MP4MetaDataRemover.Program</StartupObject>
+    <Copyright>Copyright christian.meijer</Copyright>
   </PropertyGroup>
 
 </Project>

@@ -156,7 +156,7 @@
             // dtpFileDate
             // 
             dtpFileDate.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            dtpFileDate.CustomFormat = "yyyy-MM-dd hh:mm";
+            dtpFileDate.CustomFormat = "yyyy-MM-dd HH:mm";
             dtpFileDate.Format = DateTimePickerFormat.Custom;
             dtpFileDate.Location = new Point(12, 186);
             dtpFileDate.MinDate = new DateTime(1970, 1, 1, 0, 0, 0, 0);
