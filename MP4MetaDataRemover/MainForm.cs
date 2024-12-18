@@ -76,7 +76,7 @@ public partial class MainForm : Form
 
         if (conversionSettings.files.Count == 0)
         {
-            MessageBox.Show("There is no MP4 file selected.");
+            MessageBox.Show("There is no MP4/mkv file selected.");
             return;
         }
 
@@ -101,7 +101,7 @@ public partial class MainForm : Form
 
         if (conversionSettings.files.Count == 0)
         {
-            MessageBox.Show("There is no mp4 files in this folder.");
+            MessageBox.Show("There is no mp4/mkv files in this folder.");
             return;
         }
 
@@ -123,7 +123,8 @@ public partial class MainForm : Form
 
     private void GetFilesFromFolder()
     {
-        var files = Directory.GetFiles(conversionSettings.selectedFolderPath, "*.mp4");
+        string[] allowedExtensions = [".mp4", ".mkv"];
+        var files = Directory.GetFiles(conversionSettings.selectedFolderPath).Where(file => allowedExtensions.Any(file.ToLower().EndsWith)).ToList(); 
 
         foreach (var file in files)
             conversionSettings.files.Add(file);
@@ -287,7 +288,7 @@ public partial class MainForm : Form
         OpenFileDialog fileDlg = new OpenFileDialog();
 
         fileDlg.Multiselect = true;
-        fileDlg.Filter = "mp4 files (*.mp4)|*.mp4|All files (*.*)|*.*";
+        fileDlg.Filter = "mp4 files (*.mp4)|*.mp4|mkv files (*.mkv)|*.mkv|All files (*.*)|*.*";
         fileDlg.FilterIndex = 0;
 
         if (fileDlg.ShowDialog() == DialogResult.OK)
@@ -403,7 +404,7 @@ public partial class MainForm : Form
 
         foreach (var file in files)
         {
-            if (Path.GetExtension(file).ToUpper() == ".MP4")
+            if ((Path.GetExtension(file).ToUpper() == ".MP4") || (Path.GetExtension(file).ToUpper() == ".mkv"))
                 conversionSettings.files.Add(file);
             else if (files.Count == 1 && Directory.Exists(file))
             {
