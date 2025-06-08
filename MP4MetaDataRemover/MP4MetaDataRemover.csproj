@@ -8,6 +8,11 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <StartupObject>MP4MetaDataRemover.Program</StartupObject>
     <Copyright>Copyright christian.meijer</Copyright>
+    <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Icon.ico" />
+  </ItemGroup>
 
 </Project>

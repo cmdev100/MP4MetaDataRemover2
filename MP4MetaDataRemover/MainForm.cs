@@ -1,6 +1,7 @@
-using System.Text.Json;
 using System.ComponentModel;
 using System.IO;
+using System.Text.Json;
+using static System.Windows.Forms.DataFormats;
 
 namespace MP4MetaDataRemover;
 
@@ -11,7 +12,8 @@ public partial class MainForm : Form
         InitializeComponent();
     }
 
-    const string TMP_FOLDER = "tmp";
+    const string TMP_FOLDER = "tmp_conversion";
+    const string EXECUTABLE = "ffmpeg.exe";
 
     private ConversionSettings conversionSettings;
 
@@ -101,7 +103,7 @@ public partial class MainForm : Form
 
         if (conversionSettings.files.Count == 0)
         {
-            MessageBox.Show("There is no mp4/mkv files in this folder.");
+            MessageBox.Show("There are no mp4/mkv files in this folder.");
             return;
         }
 
@@ -216,8 +218,6 @@ public partial class MainForm : Form
 
     private bool RemoveMetaDataFromFile(string aFileName, out string aNewFileName)
     {
-        const string EXECUTABLE = "ffmpeg.exe";
-
         const string ARGS = "-i \"{0}\" -map_metadata -1 -c:v copy -c:a copy -fflags +bitexact " +
           "-flags:v +bitexact -flags:a +bitexact \"{1}\"";
 
@@ -229,7 +229,10 @@ public partial class MainForm : Form
 
     private static bool ExecuteCommand(string aCommand, string aArg)
     {
-        System.Diagnostics.Process process = new System.Diagnostics.Process();
+        if (!File.Exists(aCommand))
+            return false;
+
+        System.Diagnostics.Process process = new();
 
         System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo
         {
@@ -239,7 +242,9 @@ public partial class MainForm : Form
             RedirectStandardOutput = true,
             UseShellExecute = false
         };
+        
         process.StartInfo = startInfo;
+       
         if (process.Start())
         {
             process.WaitForExit();
@@ -288,7 +293,7 @@ public partial class MainForm : Form
         OpenFileDialog fileDlg = new OpenFileDialog();
 
         fileDlg.Multiselect = true;
-        fileDlg.Filter = "mp4 files (*.mp4)|*.mp4|mkv files (*.mkv)|*.mkv|All files (*.*)|*.*";
+        fileDlg.Filter = "Video files|*.mp4;*.mkv|All files (*.*)|*.*";
         fileDlg.FilterIndex = 0;
 
         if (fileDlg.ShowDialog() == DialogResult.OK)
@@ -313,7 +318,6 @@ public partial class MainForm : Form
     private void backgroundWorker1_DoWork_1(object sender, DoWorkEventArgs e)
     {
         Directory.CreateDirectory(conversionSettings.destinationPath);
-
 
         for (int i = 0; i < conversionSettings.files.Count; i++)
         {
@@ -402,9 +406,12 @@ public partial class MainForm : Form
 
         bool lFolderMode = false;
 
-        foreach (var file in files)
+        conversionSettings.files.Clear();
+
+        foreach (string file in files)
         {
-            if ((Path.GetExtension(file).ToUpper() == ".MP4") || (Path.GetExtension(file).ToUpper() == ".mkv"))
+            string lFileExt = Path.GetExtension(file);
+            if ((lFileExt.ToLower() == ".mp4") || (lFileExt.ToLower() == ".mkv"))
                 conversionSettings.files.Add(file);
             else if (files.Count == 1 && Directory.Exists(file))
             {
@@ -433,6 +440,12 @@ public partial class MainForm : Form
         }
         else
         {
+            if (!File.Exists(EXECUTABLE))
+            {
+                MessageBox.Show(String.Format("The file {0} are missing from the installation folder.", EXECUTABLE) + Environment.NewLine + "Conversion isn't possible.");
+                return;
+            }
+            
             if (!conversionSettings.useDestinationFolder)
             {
                 var filePath = Path.GetDirectoryName(conversionSettings.files[0]);
