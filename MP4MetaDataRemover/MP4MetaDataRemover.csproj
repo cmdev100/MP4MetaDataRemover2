@@ -9,6 +9,10 @@
     <StartupObject>MP4MetaDataRemover.Program</StartupObject>
     <Copyright>Copyright christian.meijer</Copyright>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
+    <FileVersion>1.1.0.0</FileVersion>
+    <AssemblyVersion>1.1</AssemblyVersion>    
+	  <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+    <Version>1.1</Version>
   </PropertyGroup>
 
   <ItemGroup>

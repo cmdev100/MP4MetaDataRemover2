@@ -69,7 +69,7 @@ public partial class MainForm : Form
             return Path.DirectorySeparatorChar;
         }
     }
-    
+
     private void EnableFiles()
     {
         pbProgress.Value = 0;
@@ -126,7 +126,7 @@ public partial class MainForm : Form
     private void GetFilesFromFolder()
     {
         string[] allowedExtensions = [".mp4", ".mkv"];
-        var files = Directory.GetFiles(conversionSettings.selectedFolderPath).Where(file => allowedExtensions.Any(file.ToLower().EndsWith)).ToList(); 
+        var files = Directory.GetFiles(conversionSettings.selectedFolderPath).Where(file => allowedExtensions.Any(file.ToLower().EndsWith)).ToList();
 
         foreach (var file in files)
             conversionSettings.files.Add(file);
@@ -237,22 +237,22 @@ public partial class MainForm : Form
         System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo
         {
             WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden,
-            FileName = aCommand,            
+            FileName = aCommand,
             Arguments = aArg,
             RedirectStandardOutput = true,
             UseShellExecute = false
         };
-        
+
         process.StartInfo = startInfo;
-       
+
         if (process.Start())
         {
             process.WaitForExit();
             return true;
         }
-        
+
         else
-            return false;            
+            return false;
     }
 
     #region form_events
@@ -324,7 +324,7 @@ public partial class MainForm : Form
             if (sender is not BackgroundWorker worker || !worker.CancellationPending)
             {
                 if (!RemoveMetaDataFromFile(conversionSettings.files[i], out string lNewFileName))
-                    throw new Exception("Conversion failed, aborting!");                                                     
+                    throw new Exception("Conversion failed, aborting!");
 
                 if (conversionSettings.fileDate != DateTime.MinValue)
                     SetFileDateToFile(lNewFileName);
@@ -349,12 +349,12 @@ public partial class MainForm : Form
             Directory.Delete(conversionSettings.destinationPath);
     }
 
-    private void SetFileDateToFile( string aFileName )
+    private void SetFileDateToFile(string aFileName)
     {
         if (String.IsNullOrEmpty(aFileName) || conversionSettings.fileDate == DateTime.MinValue)
             return;
         if (File.Exists(aFileName))
-        { 
+        {
             File.SetCreationTime(aFileName, conversionSettings.fileDate);
             File.SetLastWriteTime(aFileName, conversionSettings.fileDate);
             File.SetLastAccessTime(aFileName, conversionSettings.fileDate);
@@ -372,7 +372,7 @@ public partial class MainForm : Form
         {
             MessageBox.Show("Operation was canceled");
             ProgressUpdate(0, conversionSettings.files.Count);
-        }                
+        }
         else if (e.Error != null)
             MessageBox.Show(e.Error.Message);
         else if (e.Result != null)
@@ -417,16 +417,16 @@ public partial class MainForm : Form
             {
                 conversionSettings.selectedFolderPath = file;
                 lFolderMode = true;
-            }            
+            }
         }
 
         if (lFolderMode)
         {
             conversionSettings.files.Clear();
-            EnableFolder();            
+            EnableFolder();
         }
         else if (conversionSettings.files.Count > 0)
-            EnableFiles();                
+            EnableFiles();
     }
 
     private void btnStart_Click(object sender, EventArgs e)
@@ -445,7 +445,7 @@ public partial class MainForm : Form
                 MessageBox.Show(String.Format("The file {0} are missing from the installation folder.", EXECUTABLE) + Environment.NewLine + "Conversion isn't possible.");
                 return;
             }
-            
+
             if (!conversionSettings.useDestinationFolder)
             {
                 var filePath = Path.GetDirectoryName(conversionSettings.files[0]);
@@ -457,7 +457,8 @@ public partial class MainForm : Form
             {
                 MessageBox.Show("It''s not allowed to use the same folder as output folder.");
                 return;
-            };
+            }
+            ;
 
             btnStart.Text = "Stop";
             btnSelectFolder.Enabled = false;
@@ -472,4 +473,16 @@ public partial class MainForm : Form
         }
     }
     #endregion form_events
+
+    private void btnSelectOutputFolder_Click(object sender, EventArgs e)
+    {
+        var fbd = new FolderBrowserDialog();
+
+        if (fbd.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+        {
+            conversionSettings.destinationPath = fbd.SelectedPath;
+            lblOutputFolder.Text = fbd.SelectedPath;
+            SetButtons();
+        }
+    }
 }

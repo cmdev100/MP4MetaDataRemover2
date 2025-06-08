@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             pbProgress = new ProgressBar();
             btnStart = new Button();
             lblFilesTxt = new Label();
@@ -208,6 +209,7 @@
             btnSelectOutputFolder.TabIndex = 15;
             btnSelectOutputFolder.Text = "...";
             btnSelectOutputFolder.UseVisualStyleBackColor = true;
+            btnSelectOutputFolder.Click += btnSelectOutputFolder_Click;
             // 
             // backgroundWorker1
             // 
@@ -240,9 +242,10 @@
             Controls.Add(btnStart);
             Controls.Add(pbProgress);
             DoubleBuffered = true;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MinimumSize = new Size(480, 260);
             Name = "MainForm";
-            Text = "MP4 Meta Data Remover";
+            Text = "MP4 Meta Data Remover (.NET edition)";
             FormClosing += MainForm_FormClosing;
             Shown += MainForm_Shown;
             DragDrop += MainForm_DragDrop;
