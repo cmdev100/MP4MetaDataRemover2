@@ -16,7 +16,6 @@ Using Visual Studio Community 2022 to build.
 The FFMpeg is required to make the program to work. Windows [executables](https://ffmpeg.org/download.html#build-windows/) of ffmpeg is available for download.\
 [.NET Desktop Runtime](https://dotnet.microsoft.com/en-us/download/dotnet/9.0) 9.
 
-## Screenshot
 ## GUI
 ![MP4 Meta data remover graphical interface!](/assets/Screenshot.png "MP4 Meta data remover")
 
